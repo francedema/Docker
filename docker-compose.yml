@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    environment:
+       -  MYSQL_ROOT_PASSWORD=password
+       -  MYSQL_DATABASE=wordpress
+       -  MYSQL_USER=wordpress
+       -  MYSQL_PASSWORD=wordpress
+    volumes:
+       - mysql:/var/lib/mysql
+  web:
+   image: wordpress:latest
+   links:
+      - mysql
+   environment:
+      - WORDPRESS_DB_HOST=mysql:3306
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+   ports:
+      - "8080:80"
+   volumes:
+     - web:/var/www/html
+volumes:
+  web:
+  mysql:
